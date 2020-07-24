@@ -26,8 +26,23 @@ func GetFromDBAndStoreInCache(res http.ResponseWriter, req *http.Request) {
 func ReadFromCache(res http.ResponseWriter, req *http.Request) {
 	//people :=[]db.Person{}
 	id := req.FormValue("ID")
-	offset, _ := strconv.Atoi(req.FormValue("offset"))
-	limit, _ := strconv.Atoi(req.FormValue("limit"))
+	if id == "" {
+		id = "*"
+	}
+	offsetStr := req.FormValue("offset")
+	if offsetStr == "" {
+		http.Error(res, "offset is required", http.StatusBadRequest)
+		return
+	}
+	offset, _ := strconv.Atoi(offsetStr)
+
+	limitStr := req.FormValue("limit")
+	if limitStr == "" {
+		http.Error(res, "limit is required", http.StatusBadRequest)
+		return
+	}
+
+	limit, _ := strconv.Atoi(limitStr)
 	entries := utils.FetchFromCache(id, offset, limit)
 	// person := &db.Person{}
 	// json.Unmarshal([]byte(entry), &person)

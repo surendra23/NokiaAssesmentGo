@@ -73,12 +73,6 @@ var doc = `{
 								"$ref": "#/definitions/Person"
 							}
 						}
-					},
-					"default": {
-						"description": "unexpected error",
-						"schema": {
-							"$ref": "#/definitions/Error"
-						}
 					}
 				}
 			}
@@ -90,12 +84,6 @@ var doc = `{
 				"responses": {
 					"200": {
 						"description": "Stores people details from DB into cache"
-					},
-					"default": {
-						"description": "unexpected error",
-						"schema": {
-							"$ref": "#/definitions/Error"
-						}
 					}
 				}
 			}
@@ -115,22 +103,6 @@ var doc = `{
                   "type": "string"
                 }
               }
-		},
-		"Error": {
-			"type": "object",
-			"required": [
-				"code",
-				"message"
-			],
-			"properties": {
-				"code": {
-					"type": "integer",
-					"format": "int32"
-				},
-				"message": {
-					"type": "string"
-				}
-			}
 		}
 	}
 }`
