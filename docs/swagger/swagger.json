@@ -1,21 +1,126 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "description": "This is a sample server Petstore server.",
-        "title": "Swagger Example API",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
+	"swagger": "2.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Implement Data Caching Service using micro service architecture and deploy minikube environment using docker and Kubernetes tools.",
+		"termsOfService": "http://swagger.io/terms/",
+		"contact": {
+			"name": "Swagger API Team",
+			"email": "apiteam@swagger.io",
+			"url": "http://swagger.io"
+		},
+		"license": {
+			"name": "Apache 2.0",
+			"url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+		}
+	},
+	"host": "localhost",
+	"basePath": "/",
+	"schemes": [
+		"http"
+	],
+	"consumes": [
+		"application/json"
+	],
+	"produces": [
+		"application/json"
+	],
+	"paths": {
+		"/readFromCache": {
+			"get": {
+				"description": "Returns the data from cache with provided pagination.\n",
+				"operationId": "readFromCache",
+				"parameters": [{
+						"name": "ID",
+						"in": "query",
+						"description": "ID to filter by",
+						"required": false,
+						"type": "string"
+					},
+					{
+						"name": "offset",
+						"in": "query",
+						"description": "starting point of results to return",
+						"required": false,
+						"type": "integer",
+						"format": "int64"
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"description": "maximum number of results to return",
+						"required": false,
+						"type": "integer",
+						"format": "int64"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Persons from cache",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/Person"
+							}
+						}
+					},
+					"default": {
+						"description": "unexpected error",
+						"schema": {
+							"$ref": "#/definitions/Error"
+						}
+					}
+				}
+			}
         },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
-        "version": "1.0"
-    },
-    "host": "petstore.swagger.io",
-    "basePath": "/",
-    "paths": {}
+        "/getFromDBAndStoreInCache": {
+			"get": {
+				"description": "Stores the data in persistance DB into Redis Cache.\n",
+				"operationId": "getFromDBAndStoreInCache",
+				"responses": {
+					"200": {
+						"description": "Stores persons details from DB into cache"
+					},
+					"default": {
+						"description": "unexpected error",
+						"schema": {
+							"$ref": "#/definitions/Error"
+						}
+					}
+				}
+			}
+        }
+	},
+	"definitions": {
+		"Person": {
+			"type": "object",
+			"properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "firstname": {
+                  "type": "string"
+                },
+                "lastname": {
+                  "type": "string"
+                }
+              }
+		},
+		"Error": {
+			"type": "object",
+			"required": [
+				"code",
+				"message"
+			],
+			"properties": {
+				"code": {
+					"type": "integer",
+					"format": "int32"
+				},
+				"message": {
+					"type": "string"
+				}
+			}
+		}
+	}
 }
